@@ -152,13 +152,11 @@ styleSelect.addEventListener('change', () => {
 });
 
 // FILTRO MULTIPLE(POR ESTILO ARTISTICO Y PRECIO)
-
 const FilterByStyleAndPrice = () => {
   const maxPrice = Number(document.querySelector('#in-price').value);
   const styleSelect = document.getElementById('style-select').value;
 
-  console.log('maxPrice:', maxPrice);
-  console.log('styleSelect:', styleSelect);
+  let showNoResultsMessage = maxPrice > 450;
 
   const filteredArtworks = PAINTING.filter(
     (artwork) =>
@@ -166,7 +164,15 @@ const FilterByStyleAndPrice = () => {
       (styleSelect === 'All Styles' || artwork.style === styleSelect)
   );
 
-  renderArtwork(filteredArtworks);
+  if (filteredArtworks.length === 0 || showNoResultsMessage) {
+    const noResultsMessage = document.createElement('h2');
+    noResultsMessage.textContent = 'No se encuentran coincidencias de búsqueda';
+
+    document.getElementById('artworks-container').innerHTML = ''; // Limpiar contenido anterior
+    document.getElementById('artworks-container').appendChild(noResultsMessage);
+  } else {
+    renderArtwork(filteredArtworks);
+  }
 };
 
 const listenerStyleAndPrice = document.querySelector('#btn-search');
